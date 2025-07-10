@@ -15,8 +15,8 @@
   <header>
     <h2>{{ site.title }}</h2>
     <nav>
-      {% for name, url in site.nav_links %}
-        <a href="{{ url }}">{{ name }}</a>
+      {% for link in site.nav_links %}
+        <a href="{{ link.url }}">{{ link.name }}</a>
       {% endfor %}
     </nav>
   </header>
