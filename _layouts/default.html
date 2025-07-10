@@ -4,56 +4,22 @@
   <meta charset="UTF-8">
   <title>{{ page.title }} – {{ site.title }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;600&family=UnifrakturCook:700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    .byline-box {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: 'Crimson Text', serif;
-      padding: 0.2rem 1.5rem 0.5rem 1.5rem;
-      border-bottom: 1px solid #b29272;
-    }
-    .byline-content {
-      font-size: 0.65rem;
-      line-height: 1.2;
-      max-width: 300px;
-    }
-    
-    .byline-label {
-      font-weight: bold;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-    }
-    
-    .byline-author {
-      font-family: 'Georgia', serif;
-      font-weight: 700;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
-    }
-    .masthead {
-      text-align: center;
-      padding: 1.5rem 1rem 0.5rem;
-      background-color: var(--bg);
-      border-bottom: 2px solid #b29272;
-    }
-    
-    .masthead h1 {
-      margin: 0;
-      font-size: 2.8rem;
-      font-family: 'UnifrakturCook', cursive;
-      color: var(--heading);
-      letter-spacing: 1px;
+    :root {
+      --bg: #201c2c;
+      --text: #ebebef;
+      --heading: #ffffff;
+      --link: #82aaff;
+      --card-bg: #2b2640;
     }
 
-    
-    :root {
-      --bg: #f3d4b5;
-      --text: #2a1e14;
-      --heading: #000000;
-      --link: #553311;
-      --card-bg: #f6e9d4;
+    body.light {
+      --bg: #f9f9f9;
+      --text: #333333;
+      --heading: #111111;
+      --link: #007acc;
+      --card-bg: #ffffff;
     }
 
     * {
@@ -61,135 +27,120 @@
     }
 
     body {
+      font-family: 'Inter', sans-serif;
       background-color: var(--bg);
       color: var(--text);
-      font-family: 'Crimson Text', serif;
       margin: 0;
       padding: 0;
-      line-height: 1.6;
+      transition: all 0.3s ease;
     }
 
-    header.masthead {
-      text-align: center;
-      padding: 2rem 1rem;
-      border-bottom: 4px double var(--text);
-      background-color: var(--bg);
+    header {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid #444;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    header.masthead h1 {
-      font-size: 3rem;
+    header h2 {
       margin: 0;
-      font-weight: 600;
+      font-size: 1.2rem;
       color: var(--heading);
     }
 
-    nav.section-nav {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin: 1rem 0;
-      padding: 0.5rem 0;
-      border-top: 1px solid var(--text);
-      border-bottom: 1px solid var(--text);
-      font-family: 'Inter', sans-serif;
-    }
-
-    nav.section-nav a {
+    nav a {
+      margin-left: 1.5rem;
       text-decoration: none;
       color: var(--link);
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.9rem;
+      font-weight: 500;
     }
 
-    .banner {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      padding: 2rem;
-      background-color: var(--card-bg);
-      border-bottom: 1px solid var(--text);
-    }
-
-    .banner img {
-      max-width: 240px;
-      height: auto;
-      border-radius: 4px;
-      box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .banner .intro {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .banner .intro h2 {
-      margin-top: 0;
-      color: var(--heading);
-      font-size: 1.8rem;
+    nav a:hover {
+      text-decoration: underline;
     }
 
     main {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 2rem;
+      max-width: 700px;
+      margin: 3rem auto;
+      background-color: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    h2, h3 {
+    main h1, main h2, main h3 {
+      margin-top: 1.6rem;
       color: var(--heading);
-      margin-top: 2rem;
     }
 
-    footer {
-      text-align: center;
-      padding: 1rem;
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--link);
+      color: var(--link);
+      padding: 0.3rem 0.7rem;
+      border-radius: 5px;
       font-size: 0.85rem;
-      color: #5c3c2b;
-      border-top: 1px solid var(--text);
-      margin-top: 3rem;
+      cursor: pointer;
+      margin-left: 1rem;
     }
 
     @media (max-width: 768px) {
-      .banner {
+      header {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
+      }
+
+      nav {
+        margin-top: 1rem;
+      }
+
+      nav a {
+        margin-left: 0;
+        margin-right: 1rem;
       }
     }
   </style>
 </head>
-<body>
-  
-  <section class="byline-box">
-    <div class="byline-content">
-      <span class="byline-label">By <span class="byline-author">Francisco Maia Costa</span></span><br>
-      <span class="byline-text">Website developed as a self project. Hosted with the help of GitHub.</span>
-    </div>
-  </section>
-
-  <header class="masthead">
-    <h1>{{ site.title }}</h1>
+<body class="dark">
+  <header>
+    <h2>{{ site.title }}</h2>
+    <nav>
+      {% for link in site.nav_links %}
+        <a href="{{ link.url }}">{{ link.name }}</a>
+      {% endfor %}
+      <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    </nav>
   </header>
-
-  <nav class="section-nav">
-    {% for link in site.nav_links %}
-      <a href="{{ link.url }}">{{ link.name }}</a>
-    {% endfor %}
-  </nav>
-
-  <section class="banner">
-    <img src="{{ site.baseurl }}/assets/images/profile.jpg" alt="Profile photo of Francisco Costa">
-    <div class="intro">
-      <h2>Welcome</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ultricies, nisl at convallis interdum, neque magna lacinia lorem, a bibendum nisi quam at turpis. Curabitur sit amet urna neque. Proin dignissim sed turpis vitae luctus.</p>
-    </div>
-  </section>
-
   <main>
     {{ content }}
   </main>
+  <script>
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+    const body = document.body;
 
-  <footer>
-    &copy; {{ site.time | date: "%Y" }} {{ site.title }}. All rights reserved.
-  </footer>
+    if (savedTheme) {
+      body.className = savedTheme;
+    } else {
+      body.className = prefersDark ? 'dark' : 'light';
+    }
+
+    function toggleTheme() {
+      if (body.classList.contains('dark')) {
+        body.classList.remove('dark');
+        body.classList.add('light');
+        localStorage.setItem('theme', 'light');
+      } else {
+        body.classList.remove('light');
+        body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+  </script>
 </body>
 </html>
