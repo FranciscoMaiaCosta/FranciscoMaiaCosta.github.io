@@ -6,11 +6,12 @@ nav_links:
   - name: Home
     url: /
   - name: Online CV
-    url: /cv
+    url: /cv/
   - name: Excel
-    url: /excel
+    url: /excel/
   - name: Python
-    url: /python
+    url: /python/
+
 sass:
   style: compressed
 
