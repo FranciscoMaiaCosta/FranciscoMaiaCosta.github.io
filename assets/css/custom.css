@@ -1,1 +1,37 @@
+/* Light (newspaper) theme */
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: #f3d4b5;
+    color: #1a1a1a;
+    font-family: 'Georgia', serif;
+  }
+
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  header, footer, nav {
+    background-color: #e3c6a3;
+    border-bottom: 2px solid #c2a077;
+  }
+}
+
+/* Dark (modern portfolio) theme */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #100c0c;
+    color: #eaeaea;
+    font-family: 'Inter', sans-serif;
+  }
+
+  a {
+    color: #e2e2ff;
+  }
+
+  header, footer, nav {
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #444;
+  }
+}
 
