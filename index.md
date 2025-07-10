@@ -1,22 +1,12 @@
 ---
-layout: home
-title: Francisco Costa – Portfolio
+layout: default
+title: Home
 ---
 
-## 👋 Welcome
+## 👋 Welcome!
 
-This is my personal portfolio showcasing my work in **Excel dashboards** and **Python data projects**.
+This is my portfolio for Excel dashboards and Python projects.
 
----
-
-### 📊 Excel Projects
-
-
-### 🐍 Python Projects
-
-
-
----
-
-📫 Want to connect?  
-[LinkedIn](https://www.linkedin.com/in/francisco-costa-1a2a01246/)  
+- Explore [Excel Projects](/excel)
+- Explore [Python Projects](/python)
+- See my [Online CV](/cv)
