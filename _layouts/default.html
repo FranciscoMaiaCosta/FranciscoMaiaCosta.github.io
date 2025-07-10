@@ -4,7 +4,13 @@
   <meta charset="UTF-8">
   <title>{{ page.title }} – {{ site.title }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Favicon (optional) -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+
   <style>
     :root {
       --bg: #201c2c;
@@ -50,7 +56,11 @@
     header h2 {
       margin: 0;
       font-size: 1.2rem;
+    }
+
+    header h2 a {
       color: var(--heading);
+      text-decoration: none;
     }
 
     nav a {
@@ -58,10 +68,28 @@
       text-decoration: none;
       color: var(--link);
       font-weight: 500;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+      transition: border-color 0.2s ease;
     }
 
     nav a:hover {
       text-decoration: underline;
+    }
+
+    nav a.active {
+      border-color: var(--link);
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--link);
+      color: var(--link);
+      padding: 0.3rem 0.7rem;
+      border-radius: 5px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-left: 1rem;
     }
 
     main {
@@ -76,17 +104,6 @@
     main h1, main h2, main h3 {
       margin-top: 1.6rem;
       color: var(--heading);
-    }
-
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--link);
-      color: var(--link);
-      padding: 0.3rem 0.7rem;
-      border-radius: 5px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      margin-left: 1rem;
     }
 
     @media (max-width: 768px) {
@@ -104,21 +121,30 @@
         margin-right: 1rem;
       }
     }
+
+    @media (max-width: 480px) {
+      main {
+        padding: 1rem;
+        margin: 1rem;
+      }
+    }
   </style>
 </head>
 <body class="dark">
   <header>
-    <h2>{{ site.title }}</h2>
+    <h2><a href="/">{{ site.title }}</a></h2>
     <nav>
       {% for link in site.nav_links %}
-        <a href="{{ link.url }}">{{ link.name }}</a>
+        <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>{{ link.name }}</a>
       {% endfor %}
       <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
     </nav>
   </header>
+
   <main>
     {{ content }}
   </main>
+
   <script>
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const savedTheme = localStorage.getItem('theme');
