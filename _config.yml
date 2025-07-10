@@ -1,11 +1,13 @@
 title: Francisco Costa – Portfolio
 description: Finance • Excel • Python
-theme: minima  # We’ll override with custom layout
 markdown: kramdown
 
-# Navigation links
 nav_links:
-  Home: /
-  Online CV: /cv
-  Excel: /excel
-  Python: /python
+  - name: Home
+    url: /
+  - name: Online CV
+    url: /cv
+  - name: Excel
+    url: /excel
+  - name: Python
+    url: /python
