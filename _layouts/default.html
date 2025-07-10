@@ -4,26 +4,50 @@
   <meta charset="UTF-8">
   <title>{{ page.title }} – {{ site.title }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;600&family=UnifrakturCook:700&display=swap" rel="stylesheet">
   <style>
     .byline-box {
       background-color: var(--bg);
       color: var(--text);
       font-family: 'Crimson Text', serif;
-      font-size: 0.7rem;
-      padding: 0.5rem 1.5rem;
-      text-align: left;
-      border-bottom: 1px solid #c1a98b;
+      padding: 0.2rem 1.5rem 0.5rem 1.5rem;
+      border-bottom: 1px solid #b29272;
+    }
+    .byline-content {
+      font-size: 0.65rem;
+      line-height: 1.2;
+      max-width: 300px;
     }
     
-    .byline-box .byline-author {
-      font-size: 0.85rem;
+    .byline-label {
       font-weight: bold;
-      font-family: 'Georgia', serif;
-      letter-spacing: 0.4px;
+      font-size: 0.7rem;
       text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    
+    .byline-author {
+      font-family: 'Georgia', serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+    .masthead {
+      text-align: center;
+      padding: 1.5rem 1rem 0.5rem;
+      background-color: var(--bg);
+      border-bottom: 2px solid #b29272;
+    }
+    
+    .masthead h1 {
+      margin: 0;
+      font-size: 2.8rem;
+      font-family: 'UnifrakturCook', cursive;
+      color: var(--heading);
+      letter-spacing: 1px;
     }
 
+    
     :root {
       --bg: #f3d4b5;
       --text: #2a1e14;
@@ -134,10 +158,14 @@
   </style>
 </head>
 <body>
-<section class="byline-box">
-  <p><span class="byline-author">By Francisco Maia Costa</span><br>
-  Website developed as a self project. Hosted with the help of GitHub.</p>
-</section>
+  
+  <section class="byline-box">
+    <div class="byline-content">
+      <span class="byline-label">By <span class="byline-author">Francisco Maia Costa</span></span><br>
+      <span class="byline-text">Website developed as a self project. Hosted with the help of GitHub.</span>
+    </div>
+  </section>
+
   <header class="masthead">
     <h1>{{ site.title }}</h1>
   </header>
