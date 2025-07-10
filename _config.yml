@@ -1,3 +1,11 @@
 title: Francisco Costa – Portfolio
-description: Personal portfolio site for Excel and Python projects.
-theme: minima
+description: Finance • Excel • Python
+theme: minima  # We’ll override with custom layout
+markdown: kramdown
+
+# Navigation links
+nav_links:
+  Home: /
+  Online CV: /cv
+  Excel: /excel
+  Python: /python
