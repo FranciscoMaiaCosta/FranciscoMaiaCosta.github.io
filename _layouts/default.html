@@ -68,12 +68,12 @@
       cursor: pointer;
     }
 
-      #nav-desktop {
+    #nav-desktop {
       display: flex;
       align-items: center;
       gap: 1.5rem;
     }
-    
+
     #nav-mobile {
       display: none;
       flex-direction: column;
@@ -82,6 +82,18 @@
       padding: 1rem 2rem;
       gap: 1rem;
       border-bottom: 1px solid #444;
+      animation: dropdown 0.3s ease;
+    }
+
+    @keyframes dropdown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     nav a {
@@ -135,63 +147,20 @@
       color: var(--heading);
     }
 
-    /* Responsive dropdown menu for mobile */
+    /* Mobile styles */
     @media (max-width: 768px) {
+      #nav-desktop {
+        display: none;
+      }
+
       .menu-toggle {
         display: block;
       }
 
-      nav {
-        display: none;
-        flex-direction: column;
-        align-items: flex-start;
-        background-color: var(--card-bg);
-        padding: 1rem 2rem;
-        gap: 1rem;
-        border-bottom: 1px solid #444;
-        animation: dropdown 0.3s ease;
-      }
-
-      nav.show {
+      #nav-mobile.show {
         display: flex;
       }
-
-      /* Desktop menu inside header */
-      #nav-desktop {
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-      }
-      
-      #nav-mobile {
-        display: none;
-        flex-direction: column;
-        align-items: flex-start;
-        background-color: var(--card-bg);
-        padding: 1rem 2rem;
-        gap: 1rem;
-        border-bottom: 1px solid #444;
-        animation: dropdown 0.3s ease;
-      }
-      
-      @keyframes dropdown {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      
-      
-      @media (min-width: 769px) {
-        .menu-toggle {
-          display: none;
-        }
-      }
-
+    }
 
     @media (max-width: 480px) {
       main {
@@ -199,27 +168,33 @@
         margin: 1rem;
       }
     }
+
+    @media (min-width: 769px) {
+      .menu-toggle {
+        display: none;
+      }
+    }
   </style>
-<header>
-  <h2><a href="/">{{ site.title }}</a></h2>
-  <nav id="nav-desktop">
+</head>
+
+<body class="dark">
+  <header>
+    <h2><a href="/">{{ site.title }}</a></h2>
+    <nav id="nav-desktop">
+      {% for link in site.nav_links %}
+        <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>{{ link.name }}</a>
+      {% endfor %}
+      <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    </nav>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  </header>
+
+  <nav id="nav-mobile">
     {% for link in site.nav_links %}
       <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>{{ link.name }}</a>
     {% endfor %}
     <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
   </nav>
-  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-</header>
-
-<nav id="nav-mobile">
-  {% for link in site.nav_links %}
-    <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>{{ link.name }}</a>
-  {% endfor %}
-  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
-</nav>
-
-
-
 
   <main>
     {{ content }}
