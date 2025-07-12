@@ -176,18 +176,18 @@
       }
     }
   </style>
-</head>
-<body class="dark">
 <header>
   <h2><a href="/">{{ site.title }}</a></h2>
   <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-  <nav id="nav">
-    {% for link in site.nav_links %}
-      <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>{{ link.name }}</a>
-    {% endfor %}
-    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
-  </nav>
 </header>
+
+<nav id="nav">
+  {% for link in site.nav_links %}
+    <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>{{ link.name }}</a>
+  {% endfor %}
+  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+</nav>
+
 
 
   <main>
