@@ -186,7 +186,7 @@
       {% endfor %}
       <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
     </nav>
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <button class="menu-toggle" id="menu-toggle" onclick="toggleMenu()">☰</button>
   </header>
 
   <nav id="nav-mobile">
@@ -204,23 +204,42 @@
     const body = document.body;
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const savedTheme = localStorage.getItem('theme');
-
+    const nav = document.getElementById('nav-mobile');
+    const menuToggle = document.getElementById('menu-toggle');
+  
     if (savedTheme) {
       body.className = savedTheme;
     } else {
       body.className = prefersDark ? 'dark' : 'light';
     }
-
+  
     function toggleTheme() {
       body.classList.toggle('light');
       body.classList.toggle('dark');
       localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
     }
-
+  
     function toggleMenu() {
-      const nav = document.getElementById('nav-mobile');
       nav.classList.toggle('show');
+      menuToggle.textContent = nav.classList.contains('show') ? '✕' : '☰';
     }
+  
+    // Close menu if clicked outside
+    document.addEventListener('click', function(event) {
+      const isClickInside = nav.contains(event.target) || menuToggle.contains(event.target);
+      if (!isClickInside && nav.classList.contains('show')) {
+        nav.classList.remove('show');
+        menuToggle.textContent = '☰';
+      }
+    });
+  
+    // Close menu when a link is clicked
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('show');
+        menuToggle.textContent = '☰';
+      });
+    });
   </script>
 </body>
 </html>
