@@ -178,15 +178,22 @@
   </style>
 <header>
   <h2><a href="/">{{ site.title }}</a></h2>
+  <nav id="nav-desktop">
+    {% for link in site.nav_links %}
+      <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>{{ link.name }}</a>
+    {% endfor %}
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+  </nav>
   <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 </header>
 
-<nav id="nav">
+<nav id="nav-mobile">
   {% for link in site.nav_links %}
     <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>{{ link.name }}</a>
   {% endfor %}
   <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
 </nav>
+
 
 
 
