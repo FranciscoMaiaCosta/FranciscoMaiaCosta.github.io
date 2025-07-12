@@ -146,6 +146,24 @@
         display: flex;
       }
 
+      /* Desktop menu inside header */
+      #nav-desktop {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+      
+      #nav-mobile {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        background-color: var(--card-bg);
+        padding: 1rem 2rem;
+        gap: 1rem;
+        border-bottom: 1px solid #444;
+        animation: dropdown 0.3s ease;
+      }
+      
       @keyframes dropdown {
         from {
           opacity: 0;
@@ -156,18 +174,28 @@
           transform: translateY(0);
         }
       }
-    }
-
-    @media (min-width: 769px) {
-      nav {
-        display: flex !important;
-        flex-direction: row;
-        justify-content: flex-end;
-        background-color: transparent;
-        padding: 0;
-        border: none;
+      
+      /* Responsive behavior */
+      @media (max-width: 768px) {
+        #nav-desktop {
+          display: none;
+        }
+      
+        .menu-toggle {
+          display: block;
+        }
+      
+        #nav-mobile.show {
+          display: flex;
+        }
       }
-    }
+      
+      @media (min-width: 769px) {
+        .menu-toggle {
+          display: none;
+        }
+      }
+
 
     @media (max-width: 480px) {
       main {
@@ -219,7 +247,7 @@
     }
 
     function toggleMenu() {
-      const nav = document.getElementById('nav');
+      const nav = document.getElementById('nav-mobile');
       nav.classList.toggle('show');
     }
   </script>
