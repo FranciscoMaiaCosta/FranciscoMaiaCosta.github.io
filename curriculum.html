@@ -8,6 +8,36 @@
     <link rel="stylesheet" href="./assets/css2">
     <meta name="description" content="Francisco Maia Costa's professional curriculum and resume">
     <style>
+        /* CSS Variables for theming */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f8f8;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-accent: #000000;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --card-bg: #ffffff;
+            --button-bg: #000000;
+            --button-text: #ffffff;
+            --button-hover: #333333;
+            --overlay-bg: rgba(0, 0, 0, 0.45);
+            --header-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --text-accent: #ffffff;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --card-bg: #2d2d2d;
+            --button-bg: #ffffff;
+            --button-text: #000000;
+            --button-hover: #f0f0f0;
+            --overlay-bg: rgba(255, 255, 255, 0.15);
+            --header-bg: rgba(26, 26, 26, 0.95);
+        }
         /* Reset and base styles */
         * {
             margin: 0;
@@ -22,8 +52,9 @@
         body {
             font-family: inherit;
             line-height: 1.6;
-            color: #333;
-            background-color: #fff;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            transition: all 0.3s ease;
         }
 
         /* Header styles */
@@ -32,11 +63,12 @@
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--header-bg);
             backdrop-filter: blur(10px);
             z-index: 1000;
             padding: 1rem 4vw;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         .header-inner {
@@ -54,7 +86,8 @@
 
         .header-title a {
             text-decoration: none;
-            color: #333;
+            color: var(--text-accent);
+            transition: color 0.3s ease;
         }
 
         .header-nav {
@@ -64,18 +97,38 @@
 
         .header-nav a {
             text-decoration: none;
-            color: #333;
+            color: var(--text-primary);
             font-weight: 400;
             transition: color 0.3s ease;
         }
 
         .header-nav a:hover {
-            color: #666;
+            color: var(--text-secondary);
         }
 
         .header-nav a[aria-current="page"] {
             font-weight: 500;
-            color: #000;
+            color: var(--text-accent);
+        }
+
+        /* Dark mode toggle */
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--text-primary);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--text-primary);
+            color: var(--bg-primary);
         }
 
         /* Mobile menu */
@@ -84,7 +137,26 @@
             background: none;
             border: none;
             font-size: 1.5rem;
+            color: var(--text-primary);
             cursor: pointer;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-nav.active {
+            display: flex;
         }
 
         @media (max-width: 768px) {
@@ -498,6 +570,86 @@
     </footer>
 
     <script>
+        // Theme management (match index.html)
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeUI(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeUI(newTheme);
+        }
+
+        function updateThemeUI(theme) {
+            const icon = theme === 'dark' ? '☀️' : '🌙';
+            const text = theme === 'dark' ? 'Light' : 'Dark';
+
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            if (themeIcon) themeIcon.textContent = icon;
+            if (themeText) themeText.textContent = text;
+
+            const mobileThemeIcon = document.getElementById('mobile-theme-icon');
+            const mobileThemeText = document.getElementById('mobile-theme-text');
+            if (mobileThemeIcon) mobileThemeIcon.textContent = icon;
+            if (mobileThemeText) mobileThemeText.textContent = text;
+        }
+
+        // Mobile menu toggle (match index.html)
+        function toggleMobileMenu() {
+            const mobileNav = document.getElementById('mobile-nav');
+            const menuToggle = document.getElementById('menu-toggle');
+            if (mobileNav.classList.contains('active')) {
+                mobileNav.classList.remove('active');
+                menuToggle.textContent = '☰';
+            } else {
+                mobileNav.classList.add('active');
+                menuToggle.textContent = '✕';
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
+
+            const menuToggle = document.getElementById('menu-toggle');
+            if (menuToggle) {
+                menuToggle.addEventListener('click', toggleMobileMenu);
+            }
+
+            // Close mobile menu when clicking links
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    const mobileNav = document.getElementById('mobile-nav');
+                    const menuToggle = document.getElementById('menu-toggle');
+                    mobileNav.classList.remove('active');
+                    menuToggle.textContent = '☰';
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                const mobileNav = document.getElementById('mobile-nav');
+                const menuToggle = document.getElementById('menu-toggle');
+                const header = document.querySelector('header');
+                if (!header.contains(e.target) && mobileNav.classList.contains('active')) {
+                    mobileNav.classList.remove('active');
+                    menuToggle.textContent = '☰';
+                }
+            });
+        });
+
         // Simple form handling
         document.querySelector('.contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -516,25 +668,8 @@
             this.reset();
         });
 
-        // Mobile menu toggle (basic implementation)
-        document.querySelector('.menu-toggle').addEventListener('click', function() {
-            const nav = document.querySelector('.header-nav');
-            if (nav.style.display === 'flex') {
-                nav.style.display = 'none';
-            } else {
-                nav.style.display = 'flex';
-                nav.style.flexDirection = 'column';
-                nav.style.position = 'absolute';
-                nav.style.top = '100%';
-                nav.style.left = '0';
-                nav.style.right = '0';
-                nav.style.background = '#fff';
-                nav.style.padding = '1rem';
-                nav.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-            }
-        });
-
         // Smooth scrolling for internal links
+
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
