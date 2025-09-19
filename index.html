@@ -261,6 +261,7 @@
             background-color: var(--bg-secondary);
             position: relative;
             overflow: hidden;
+            min-height: 70vh;
         }
 
         .welcome-section::before {
@@ -393,6 +394,10 @@
             .section {
                 padding: 3rem 0;
                 min-height: auto;
+            }
+            /* Ensure welcome section has enough height on mobile */
+            .welcome-section {
+                min-height: 60vh;
             }
 
             .section-content,
