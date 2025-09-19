@@ -290,7 +290,7 @@
             position: relative;
             z-index: 2;
             grid-column: 3 / 25;
-            text-align: center;
+            text-align: left;
             color: var(--text-accent);
         }
 
@@ -309,7 +309,7 @@
             font-size: 1.1rem;
             line-height: 1.7;
             max-width: 600px;
-            margin: 0 auto;
+            margin: 0;
         }
 
         /* Footer */
@@ -406,6 +406,10 @@
             .footer-follow {
                 grid-column: 1;
             }
+
+            /* Show hero text above image on mobile */
+            .hero-content { order: 1; }
+            .hero-image { order: 2; }
 
             .hero-section .section-content {
                 gap: 3rem;
@@ -573,7 +577,7 @@
             <div class="container">
                 <div class="section-content">
                     <div class="welcome-content fade-in">
-                        <h2 class="welcome-title">Welcome, this is how you can find my thoughts and projects</h2>
+                        <h2 class="welcome-title">Welcome, this is where you can find all my professional and academic progress</h2>
                         <p class="welcome-text">
                             I'm passionate about exploring the "new age" of finance and sharing my experiences along the way. As a curious and constant learner, I value the wisdom of traditional approaches while embracing modern innovation. To me, progress comes from respecting the old and thoughtfully applying the new—building a smarter and more balanced path forward.
                         </p>
