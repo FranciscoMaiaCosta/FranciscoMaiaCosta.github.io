@@ -396,11 +396,22 @@
                 <a href="index.html">Francisco Maia Costa</a>
             </div>
             <nav class="header-nav">
-                <a href="index.html">Home</a>
-                <a href="index-dark.html">Home (Dark Mode)</a>
-                <a href="curriculum.html" aria-current="page">Curriculum</a>
+                <a href="index.html" aria-current="page">Home</a>
+                <a href="curriculum.html">Curriculum</a>
+                <button class="theme-toggle" id="theme-toggle">
+                    <span id="theme-icon">🌙</span>
+                    <span id="theme-text">Dark</span>
+                </button>
             </nav>
-            <button class="menu-toggle">☰</button>
+            <button class="menu-toggle" id="menu-toggle">☰</button>
+            <nav class="mobile-nav" id="mobile-nav">
+                <a href="index.html" aria-current="page">Home</a>
+                <a href="curriculum.html">Curriculum</a>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <span id="mobile-theme-icon">🌙</span>
+                    <span id="mobile-theme-text">Dark</span>
+                </button>
+            </nav>
         </div>
     </header>
 
