@@ -121,20 +121,22 @@
         .project-card h3 {
             padding: 1rem; color: var(--text-accent); font-size: 1.2rem;
         }
-        /* Footer */
-        footer { background: var(--bg-primary); padding: 3rem 0; }
+        /* Footer (exact match with index) */
+        footer { background-color: var(--bg-primary); padding: 3rem 0; }
         .footer-content { display: grid; grid-template-columns: repeat(24, 1fr); gap: 1rem; align-items: start; }
-        .footer-name { grid-column: 0/11; font-weight: 600; font-size: 1.5rem; color: var(--text-accent); margin-bottom: 2rem; }
+        .footer-name { grid-column: 2 / 12; font-size: 1.5rem; font-weight: 600; margin-bottom: 2rem; color: var(--text-accent); }
         .footer-explore, .footer-follow { grid-column-end: span 3; }
-        .footer-explore { grid-column: 20/23; }
-        .footer-follow { grid-column: 23/26; }
+        .footer-explore { grid-column: 20 / 23; }
+        .footer-follow { grid-column: 23 / 26; }
         .footer-section h3 { font-weight: 600; margin-bottom: 1rem; color: var(--text-accent); }
-        .footer-section ul { list-style: none; padding-left: 0; }
+        .footer-section ul { list-style: none; }
         .footer-section ul li { margin-bottom: 0.5rem; }
         .footer-section a { color: var(--text-primary); text-decoration: none; transition: color 0.3s ease; }
         .footer-section a:hover { color: var(--text-secondary); }
-        /* Footer mobile to match index */
+        /* Footer mobile (exact match with index) */
         @media (max-width: 768px) {
+            .section-content,
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; padding: 0 1rem; }
             .footer-section { text-align: center; margin-bottom: 2rem; }
             .footer-name { text-align: center; margin-bottom: 3rem; }
         }
@@ -171,15 +173,15 @@
     <div class="container">
         <h1 style="margin-bottom:2rem; color:var(--text-accent);">Project Portfolio</h1>
         <div class="project-grid">
-            <a href="Project One — Francisco Maia Costa.html" class="project-card">
+            <a href="project1.html" class="project-card">
                 <img src="./assets/img/project1.jpg" alt="Project One">
                 <h3>Project One</h3>
             </a>
-            <a href="Project Two — Francisco Maia Costa.html" class="project-card">
+            <a href="project2.html" class="project-card">
                 <img src="./assets/img/project2.jpg" alt="Project Two">
                 <h3>Project Two</h3>
             </a>
-            <a href="Project Three — Francisco Maia Costa.html" class="project-card">
+            <a href="project3.html" class="project-card">
                 <img src="./assets/img/project3.jpg" alt="Project Three">
                 <h3>Project Three</h3>
             </a>
@@ -208,7 +210,7 @@
             </div>
         </div>
     </div>
-</footer>
+    </footer>
 <script>
     // Theme management (match index.html)
     function initTheme() {
