@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
     <title>Excel Portfolio — Francisco Maia Costa</title>
     <link rel="stylesheet" href="./assets/css2">
     <meta name="description" content="Francisco Maia Costa's Excel projects portfolio">
@@ -39,7 +39,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
         body {
-            font-family: inherit; line-height: 1.6; 
+            font-family: inherit; line-height: 1.6; font-size: 16px;
             color: var(--text-primary); background: var(--bg-primary);
             transition: all 0.3s ease;
         }
@@ -84,6 +84,12 @@
             .header-nav { display: none; }
             .menu-toggle { display: block; }
         }
+        /* Match index mobile header adjustments */
+        @media (max-width: 768px) {
+            header { padding: 1rem 2vw; }
+            .header-title { font-size: 1.1rem; }
+            main { padding-top: 80px; }
+        }
         main { padding-top: 100px; }
         .container { max-width: 1500px; margin: 0 auto; padding: 0 4vw; }
         .section { padding: 4rem 0; }
@@ -107,9 +113,10 @@
             padding: 1rem; color: var(--text-accent); font-size: 1.2rem;
         }
         /* Footer */
-        footer { background: var(--bg-primary); padding: 3rem 0; margin-top: 4rem; }
+        footer { background: var(--bg-primary); padding: 3rem 0; }
         .footer-content { display: grid; grid-template-columns: repeat(24, 1fr); gap: 1rem; align-items: start; }
         .footer-name { grid-column: 2/12; font-weight: 600; font-size: 1.5rem; color: var(--text-accent); margin-bottom: 2rem; }
+        .footer-explore, .footer-follow { grid-column-end: span 3; }
         .footer-explore { grid-column: 20/23; }
         .footer-follow { grid-column: 23/26; }
         .footer-section h3 { font-weight: 600; margin-bottom: 1rem; color: var(--text-accent); }
@@ -117,6 +124,11 @@
         .footer-section ul li { margin-bottom: 0.5rem; }
         .footer-section a { color: var(--text-primary); text-decoration: none; transition: color 0.3s ease; }
         .footer-section a:hover { color: var(--text-secondary); }
+        /* Footer mobile to match index */
+        @media (max-width: 768px) {
+            .footer-section { text-align: center; margin-bottom: 2rem; }
+            .footer-name { text-align: center; margin-bottom: 3rem; }
+        }
     </style>
 </head>
 <body>
