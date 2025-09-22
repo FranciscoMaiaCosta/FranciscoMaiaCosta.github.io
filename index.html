@@ -543,7 +543,7 @@
                 <a href="index.html" aria-current="page">Home</a>
                 <a href="curriculum.html">Curriculum</a>
                 <button class="theme-toggle" id="theme-toggle">
-                    <span id="theme-icon">🌙</span>
+                    <span id="theme-icon">⚫</span>
                     <span id="theme-text">Dark</span>
                 </button>
             </nav>
@@ -552,7 +552,7 @@
                 <a href="index.html" aria-current="page">Home</a>
                 <a href="curriculum.html">Curriculum</a>
                 <button class="theme-toggle" onclick="toggleTheme()">
-                    <span id="mobile-theme-icon">🌙</span>
+                    <span id="mobile-theme-icon">⚫ </span>
                     <span id="mobile-theme-text">Dark</span>
                 </button>
             </nav>
@@ -638,19 +638,19 @@
         }
 
         function updateThemeUI(theme) {
-            //const icon = theme === 'dark' ? '☀️' : '🌙';
+            const icon = theme === 'dark' ? '⚪' : '⚫';
             const text = theme === 'dark' ? 'Light' : 'Dark';
             
             // Update desktop theme toggle
-            //const themeIcon = document.getElementById('theme-icon');
+            const themeIcon = document.getElementById('theme-icon');
             const themeText = document.getElementById('theme-text');
-            //if (themeIcon) themeIcon.textContent = icon;
+            if (themeIcon) themeIcon.textContent = icon;
             if (themeText) themeText.textContent = text;
             
             // Update mobile theme toggle
-            //const mobileThemeIcon = document.getElementById('mobile-theme-icon');
+            const mobileThemeIcon = document.getElementById('mobile-theme-icon');
             const mobileThemeText = document.getElementById('mobile-theme-text');
-            //if (mobileThemeIcon) mobileThemeIcon.textContent = icon;
+            if (mobileThemeIcon) mobileThemeIcon.textContent = icon;
             if (mobileThemeText) mobileThemeText.textContent = text;
         }
 
