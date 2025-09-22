@@ -497,7 +497,7 @@
             <div class="container">
                 <div class="section-content">
                     <h1 class="cv-title fade-in">Online CV</h1>
-                    <a href="https://drive.google.com/uc?export=download&id=1hwi1rrzKkskSDyl6U-ho60vhnqdHts6D" 
+                    <a href="https://drive.google.com/uc?export=download&id=1VNtclJQP7mDWXC_Nkz_WCCms3L1VyHDd" 
                        class="download-btn fade-in-delay" 
                        target="_blank" 
                        rel="noopener">
@@ -526,13 +526,15 @@
                         </p>
                     </div>
                     <form class="contact-form fade-in-delay" action="#" method="post">
+                        <input type="text" id="website" name="website" autocomplete="off" style="position:absolute;left:-9999px;height:0;width:0;opacity:0;" tabindex="-1" aria-hidden="true">
+                        <input type="hidden" id="form_ts" name="form_ts" value="">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="fname">First Name (required)</label>
                                 <input type="text" id="fname" name="fname" required>
                             </div>
                             <div class="form-group">
-                                <label for="lname">Last Name (required)</label>
+                                <label for="lname">Last Name or Company Name (required)</label>
                                 <input type="text" id="lname" name="lname" required>
                             </div>
                         </div>
@@ -573,7 +575,16 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
+        // EmailJS config (replace with your actual keys)
+        const EMAILJS_PUBLIC_KEY = 'q-kNDnHJyI3yxS_Wd';
+        const EMAILJS_SERVICE_ID = 'service_cg34huv';
+        const EMAILJS_TEMPLATE_ID = 'template_gqpumqu';
+        const CONTACT_RECIPIENT = 'franciscomaiacosta.work@gmail.com';
+        if (window.emailjs && EMAILJS_PUBLIC_KEY && !EMAILJS_PUBLIC_KEY.includes('YOUR_')) {
+            emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+        }
         // Theme management (match index.html)
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'light';
@@ -654,22 +665,131 @@
             });
         });
 
-        // Simple form handling
-        document.querySelector('.contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
-            
-            // Here you would typically send the data to your server
-            console.log('Form submitted:', data);
-            
-            // Show success message (you can customize this)
-            alert('Thank you for your message! I\'ll get back to you soon.');
-            
-            // Reset form
-            this.reset();
+        // Utilities
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(email).toLowerCase());
+        }
+
+        function hashString(str) {
+            let hash = 5381;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) + hash) + str.charCodeAt(i);
+                hash = hash & hash;
+            }
+            return hash.toString();
+        }
+
+        function getNow() { return Date.now(); }
+
+        // Anti-spam and submit handling
+        const RATE_LIMIT_MS = 5 * 60 * 1000; // 5 minutes per email
+        const DUPLICATE_WINDOW_MS = 5 * 60 * 1000; // 5 minutes duplicate detection
+        const STORAGE_KEY_LAST_BY_EMAIL = 'contact_last_by_email_v1';
+        const STORAGE_KEY_LAST_HASHES = 'contact_last_hashes_v1';
+
+        function loadStore(key) {
+            try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch { return {}; }
+        }
+
+        function saveStore(key, obj) { localStorage.setItem(key, JSON.stringify(obj)); }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set form timestamp to measure dwell time
+            const ts = document.getElementById('form_ts');
+            if (ts) ts.value = String(getNow());
+
+            // Wire up contact form
+            const form = document.querySelector('.contact-form');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending...'; }
+
+                    const formData = new FormData(form);
+                    const fname = String(formData.get('fname') || '').trim();
+                    const lname = String(formData.get('lname') || '').trim();
+                    const email = String(formData.get('email') || '').trim();
+                    const message = String(formData.get('message') || '').trim();
+                    const website = String(formData.get('website') || '').trim(); // honeypot
+                    const formTs = Number(formData.get('form_ts') || 0);
+
+                    // Honeypot check
+                    if (website) { if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit'; } return; }
+
+                    // Dwell time check (at least 3 seconds)
+                    if (!formTs || getNow() - formTs < 3000) {
+                        alert('Please take a moment to complete the form before submitting.');
+                        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit'; }
+                        return;
+                    }
+
+                    // Field validations
+                    const errors = [];
+                    if (!fname) errors.push('First Name');
+                    if (!lname) errors.push('Last Name or Company Name');
+                    if (!email || !isValidEmail(email)) errors.push('Valid Email');
+                    if (!message || message.length < 10) errors.push('Message (min 10 chars)');
+                    if (errors.length) {
+                        alert('Please correct: ' + errors.join(', '));
+                        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit'; }
+                        return;
+                    }
+
+                    // Rate limit by sender email
+                    const lastByEmail = loadStore(STORAGE_KEY_LAST_BY_EMAIL);
+                    const lastTime = Number(lastByEmail[email] || 0);
+                    if (lastTime && (getNow() - lastTime) < RATE_LIMIT_MS) {
+                        const waitMin = Math.ceil((RATE_LIMIT_MS - (getNow() - lastTime)) / 60000);
+                        alert('You can send another message in ~' + waitMin + ' minute(s).');
+                        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit'; }
+                        return;
+                    }
+
+                    // Duplicate message detection (email + message hash in window)
+                    const lastHashes = loadStore(STORAGE_KEY_LAST_HASHES);
+                    const payloadHash = hashString(email + '|' + message);
+                    const lastHashTime = Number(lastHashes[payloadHash] || 0);
+                    if (lastHashTime && (getNow() - lastHashTime) < DUPLICATE_WINDOW_MS) {
+                        alert('This message was just sent. Please modify it before resubmitting.');
+                        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit'; }
+                        return;
+                    }
+
+                    // Prepare EmailJS params
+                    const templateParams = {
+                        to_email: CONTACT_RECIPIENT,
+                        from_email: email,
+                        from_name: fname,
+                        last_name: lname,
+                        message: message
+                    };
+
+                    try {
+                        if (!window.emailjs || EMAILJS_PUBLIC_KEY.includes('YOUR_')) {
+                            throw new Error('Email service not configured');
+                        }
+                        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+
+                        // Persist anti-spam state
+                        lastByEmail[email] = getNow();
+                        saveStore(STORAGE_KEY_LAST_BY_EMAIL, lastByEmail);
+                        lastHashes[payloadHash] = getNow();
+                        saveStore(STORAGE_KEY_LAST_HASHES, lastHashes);
+
+                        alert('Thank you for your message! I\'ll get back to you soon.');
+                        form.reset();
+                        const tsField = document.getElementById('form_ts');
+                        if (tsField) tsField.value = String(getNow());
+                    } catch (err) {
+                        console.error(err);
+                        alert('There was an issue sending your message. Please try again later.');
+                    } finally {
+                        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit'; }
+                    }
+                });
+            }
         });
 
         // Smooth scrolling for internal links
