@@ -476,7 +476,7 @@
                 <a href="curriculum.html">Curriculum</a>
                 <a href="projects.html">Projects</a>
                 <button class="theme-toggle" id="theme-toggle">
-                    <span id="theme-icon">🌙</span>
+                    <span id="theme-icon">⚫</span>
                     <span id="theme-text">Dark</span>
                 </button>
             </nav>
@@ -486,7 +486,7 @@
                 <a href="curriculum.html">Curriculum</a>
                 <a href="projects.html">Projects</a>
                 <button class="theme-toggle" onclick="toggleTheme()">
-                    <span id="mobile-theme-icon">🌙</span>
+                    <span id="mobile-theme-icon">⚫</span>
                     <span id="mobile-theme-text">Dark</span>
                 </button>
             </nav>
@@ -562,7 +562,7 @@
                 <div class="footer-section footer-explore">
                     <h3>Explore</h3>
                     <ul>
-                        <li><a href="about.html">About me</a></li>
+                        <li><a href="index.html">Home</a></li>
                         <li><a href="curriculum.html">Curriculum</a></li>
                         <li><a href="projects.html">Projects</a></li>
                     </ul>
@@ -603,7 +603,7 @@
         }
 
         function updateThemeUI(theme) {
-            const icon = theme === 'dark' ? '☀️' : '🌙';
+            const icon = theme === 'dark' ? '⚪' : '⚫';
             const text = theme === 'dark' ? 'Light' : 'Dark';
 
             const themeIcon = document.getElementById('theme-icon');

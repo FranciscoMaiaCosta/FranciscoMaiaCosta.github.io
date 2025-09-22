@@ -118,7 +118,7 @@
             <a href="index.html">Home</a>
             <a href="curriculum.html">Curriculum</a>
             <a href="projects.html" aria-current="page">Projects</a>
-            <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">
+            <button class="theme-toggle" id="theme-toggle">
                 <span id="theme-icon">⚫</span>
                 <span id="theme-text">Dark</span>
             </button>
@@ -165,7 +165,7 @@
             <div class="footer-section footer-explore">
                 <h3>Explore</h3>
                 <ul>
-                    <li><a href="about.html">About me</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="curriculum.html">Curriculum</a></li>
                     <li><a href="projects.html">Projects</a></li>
                 </ul>
@@ -173,7 +173,7 @@
             <div class="footer-section footer-follow">
                 <h3>Follow me</h3>
                 <ul>
-                    <li><a href="https://www.linkedin.com/in/francisco-costa-1a2a01246" target="_blank">LinkedIn</a></li>
+                    <li><a href="https://www.linkedin.com/in/francisco-costa-1a2a01246" target="_blank" rel="noopener">LinkedIn</a></li>
                 </ul>
             </div>
         </div>
@@ -223,56 +223,44 @@
         }
     }
 
-    // Setup function and readiness guard
-    function setupHeaderInteractions() {
+    // Event listeners (match index.html)
+    document.addEventListener('DOMContentLoaded', function() {
         initTheme();
 
+        // Theme toggle listeners
         const themeToggle = document.getElementById('theme-toggle');
-        if (themeToggle && !themeToggle.__wired) {
+        if (themeToggle) {
             themeToggle.addEventListener('click', toggleTheme);
-            themeToggle.__wired = true;
         }
 
+        // Mobile menu listener
         const menuToggle = document.getElementById('menu-toggle');
-        if (menuToggle && !menuToggle.__wired) {
+        if (menuToggle) {
             menuToggle.addEventListener('click', toggleMobileMenu);
-            menuToggle.__wired = true;
         }
 
         // Close mobile menu when clicking links
         const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
         mobileNavLinks.forEach(link => {
-            if (!link.__wired) {
-                link.addEventListener('click', () => {
-                    const mobileNav = document.getElementById('mobile-nav');
-                    const menuToggle = document.getElementById('menu-toggle');
-                    mobileNav.classList.remove('active');
-                    if (menuToggle) menuToggle.textContent = '☰';
-                });
-                link.__wired = true;
-            }
+            link.addEventListener('click', () => {
+                const mobileNav = document.getElementById('mobile-nav');
+                const menuToggle = document.getElementById('menu-toggle');
+                mobileNav.classList.remove('active');
+                menuToggle.textContent = '☰';
+            });
         });
 
         // Close mobile menu when clicking outside
-        if (!document.__headerOutsideClickWired) {
-            document.addEventListener('click', function(e) {
-                const mobileNav = document.getElementById('mobile-nav');
-                const menuToggle = document.getElementById('menu-toggle');
-                const header = document.querySelector('header');
-                if (header && !header.contains(e.target) && mobileNav && mobileNav.classList.contains('active')) {
-                    mobileNav.classList.remove('active');
-                    if (menuToggle) menuToggle.textContent = '☰';
-                }
-            });
-            document.__headerOutsideClickWired = true;
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', setupHeaderInteractions);
-    } else {
-        setupHeaderInteractions();
-    }
+        document.addEventListener('click', function(e) {
+            const mobileNav = document.getElementById('mobile-nav');
+            const menuToggle = document.getElementById('menu-toggle');
+            const header = document.querySelector('header');
+            if (!header.contains(e.target) && mobileNav.classList.contains('active')) {
+                mobileNav.classList.remove('active');
+                menuToggle.textContent = '☰';
+            }
+        });
+    });
 
     // Smooth scrolling for internal links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -285,11 +273,7 @@
         });
     });
 
-    // Smooth transitions for theme changes
-    // Apply transition to background, text, and borders
-    document.querySelectorAll('*').forEach(el => {
-        el.style.transition = 'background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease';
-    });
+    // Smooth transitions for theme changes are handled via CSS variables
 </script>
 </body>
 </html>
