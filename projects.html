@@ -118,7 +118,7 @@
             <a href="index.html">Home</a>
             <a href="curriculum.html">Curriculum</a>
             <a href="projects.html" aria-current="page">Projects</a>
-            <button class="theme-toggle" id="theme-toggle">
+            <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">
                 <span id="theme-icon">⚫</span>
                 <span id="theme-text">Dark</span>
             </button>
@@ -223,42 +223,56 @@
         }
     }
 
-    // Event listeners
-    document.addEventListener('DOMContentLoaded', function() {
+    // Setup function and readiness guard
+    function setupHeaderInteractions() {
         initTheme();
 
         const themeToggle = document.getElementById('theme-toggle');
-        if (themeToggle) {
+        if (themeToggle && !themeToggle.__wired) {
             themeToggle.addEventListener('click', toggleTheme);
+            themeToggle.__wired = true;
         }
 
         const menuToggle = document.getElementById('menu-toggle');
-        if (menuToggle) {
+        if (menuToggle && !menuToggle.__wired) {
             menuToggle.addEventListener('click', toggleMobileMenu);
+            menuToggle.__wired = true;
         }
 
         // Close mobile menu when clicking links
         const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
         mobileNavLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                const mobileNav = document.getElementById('mobile-nav');
-                const menuToggle = document.getElementById('menu-toggle');
-                mobileNav.classList.remove('active');
-                menuToggle.textContent = '☰';
-            });
+            if (!link.__wired) {
+                link.addEventListener('click', () => {
+                    const mobileNav = document.getElementById('mobile-nav');
+                    const menuToggle = document.getElementById('menu-toggle');
+                    mobileNav.classList.remove('active');
+                    if (menuToggle) menuToggle.textContent = '☰';
+                });
+                link.__wired = true;
+            }
         });
 
         // Close mobile menu when clicking outside
-        document.addEventListener('click', function(e) {
-            const mobileNav = document.getElementById('mobile-nav');
-            const menuToggle = document.getElementById('menu-toggle');
-            const header = document.querySelector('header');
-            if (!header.contains(e.target) && mobileNav.classList.contains('active')) {
-                mobileNav.classList.remove('active');
-                menuToggle.textContent = '☰';
-            }
-        });
-    });
+        if (!document.__headerOutsideClickWired) {
+            document.addEventListener('click', function(e) {
+                const mobileNav = document.getElementById('mobile-nav');
+                const menuToggle = document.getElementById('menu-toggle');
+                const header = document.querySelector('header');
+                if (header && !header.contains(e.target) && mobileNav && mobileNav.classList.contains('active')) {
+                    mobileNav.classList.remove('active');
+                    if (menuToggle) menuToggle.textContent = '☰';
+                }
+            });
+            document.__headerOutsideClickWired = true;
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupHeaderInteractions);
+    } else {
+        setupHeaderInteractions();
+    }
 
     // Smooth scrolling for internal links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
