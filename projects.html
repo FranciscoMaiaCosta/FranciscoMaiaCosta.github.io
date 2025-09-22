@@ -90,15 +90,6 @@
             .header-title { font-size: 1.1rem; }
             main { padding-top: 80px; }
         }
-        /* Match index mobile layout */
-        @media (max-width: 768px) {
-            .section { padding: 3rem 0; }
-            .section-content,
-            .footer-content { grid-template-columns: 1fr; gap: 2rem; padding: 0 1rem; }
-            .footer-name,
-            .footer-explore,
-            .footer-follow { grid-column: 1; }
-        }
         main { padding-top: 100px; }
         .container { max-width: 1500px; margin: 0 auto; padding: 0 4vw; }
         .section { padding: 4rem 0; }
@@ -134,9 +125,23 @@
         .footer-section a { color: var(--text-primary); text-decoration: none; transition: color 0.3s ease; }
         .footer-section a:hover { color: var(--text-secondary); }
         /* Footer mobile (exact match with index) */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
+            .section { padding: 3rem 0; }
             .section-content,
             .footer-content { grid-template-columns: 1fr; gap: 2rem; padding: 0 1rem; }
+            .footer-name,
+            .footer-explore,
+            .footer-follow { grid-column: 1; }
+            .footer-section { text-align: center; margin-bottom: 2rem; }
+            .footer-name { text-align: center; margin-bottom: 3rem; }
+        }
+        @media (max-width: 768px) {
+            .section { padding: 3rem 0; }
+            .section-content,
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; padding: 0 1rem; }
+            .footer-name,
+            .footer-explore,
+            .footer-follow { grid-column: 1; }
             .footer-section { text-align: center; margin-bottom: 2rem; }
             .footer-name { text-align: center; margin-bottom: 3rem; }
         }
@@ -174,16 +179,12 @@
         <h1 style="margin-bottom:2rem; color:var(--text-accent);">Project Portfolio</h1>
         <div class="project-grid">
             <a href="project1.html" class="project-card">
-                <img src="./assets/img/project1.jpg" alt="Project One">
+                <img src="./assets/img/project-1.jpg" alt="Project One">
                 <h3>Project One</h3>
             </a>
             <a href="project2.html" class="project-card">
-                <img src="./assets/img/project2.jpg" alt="Project Two">
-                <h3>Project Two</h3>
-            </a>
-            <a href="project3.html" class="project-card">
-                <img src="./assets/img/project3.jpg" alt="Project Three">
-                <h3>Project Three</h3>
+                <img src="./assets/img/project-2.jpg" alt="Project Two">
+                <h3>Coming soon</h3>
             </a>
         </div>
     </div>
