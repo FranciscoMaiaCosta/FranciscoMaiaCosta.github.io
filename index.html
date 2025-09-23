@@ -538,7 +538,8 @@
 
         /* Timeline */
         .timeline-wrapper {
-            grid-column: 15 / 26;
+            grid-column: 8 / 18;
+            justify-self: center;
         }
 
         .timeline-title {
@@ -552,7 +553,7 @@
             position: relative;
             display: grid;
             grid-auto-rows: max-content;
-            gap: 0.75rem;
+            gap: 1.25rem;
             padding-left: 2.25rem; /* room for dots/line */
             max-height: 420px; /* inner scroll container */
             overflow: auto;
@@ -584,11 +585,11 @@
             display: grid;
             grid-template-columns: auto 1fr;
             align-items: start;
-            gap: 0.75rem 1rem;
-            padding: 0.75rem 0.75rem;
-            border-radius: 8px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            gap: 0.5rem 1rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+            background: transparent;
+            border: 1px solid transparent;
             cursor: pointer;
             text-align: left;
         }
@@ -628,15 +629,26 @@
             color: var(--text-primary);
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.25s ease;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: max-height 0.25s ease, opacity 0.2s ease, transform 0.2s ease, background 0.3s ease, border-color 0.3s ease;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 0 0.5rem;
         }
 
         .timeline-item[aria-expanded="true"] .content {
-            max-height: 200px;
+            max-height: 220px;
+            opacity: 1;
+            transform: translateY(0);
+            background: var(--card-bg);
+            border-color: var(--border-color);
+            padding: 0.5rem 0.75rem;
         }
 
         @media (max-width: 1024px) {
-            .timeline-wrapper { grid-column: 15 / 25; }
+            .timeline-wrapper { grid-column: 6 / 20; }
         }
 
         @media (max-width: 768px) {
@@ -697,15 +709,24 @@
             </div>
         </section>
 
-        <!-- Timeline Section -->
+        <!-- Welcome Section -->
+        <section class="section welcome-section">
+            <div class="container">
+                <div class="section-content">
+                    <div class="welcome-content fade-in">
+                        <h2 class="welcome-title">Welcome, this is where you can find all my professional and academic progress</h2>
+                        <p class="welcome-text">
+                            I'm passionate about exploring the "new age" of finance and sharing my experiences along the way. As a curious and constant learner, I value the wisdom of traditional approaches while embracing modern innovation. To me, progress comes from respecting the old and thoughtfully applying the new, building a smarter and more balanced path forward.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section (moved below welcome) -->
         <section class="section" id="timeline">
             <div class="container">
                 <div class="section-content">
-                    <div class="hero-image">
-                        <img src="https://images.squarespace-cdn.com/content/v1/68c57d843e170b6a19693f75/392d854c-c436-4299-85f1-0e8a88422707/Imagem+WhatsApp+2025-09-13+%C3%A0s+15.27.44_6e1dfe63.jpg" 
-                             alt="Francisco Maia Costa" 
-                             loading="lazy">
-                    </div>
                     <div class="timeline-wrapper">
                         <h2 class="timeline-title">Timeline</h2>
                         <div class="timeline" role="list">
@@ -737,20 +758,6 @@
                                 <span class="content">Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu.</span>
                             </button>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Welcome Section -->
-        <section class="section welcome-section">
-            <div class="container">
-                <div class="section-content">
-                    <div class="welcome-content fade-in">
-                        <h2 class="welcome-title">Welcome, this is where you can find all my professional and academic progress</h2>
-                        <p class="welcome-text">
-                            I'm passionate about exploring the "new age" of finance and sharing my experiences along the way. As a curious and constant learner, I value the wisdom of traditional approaches while embracing modern innovation. To me, progress comes from respecting the old and thoughtfully applying the new, building a smarter and more balanced path forward.
-                        </p>
                     </div>
                 </div>
             </div>
