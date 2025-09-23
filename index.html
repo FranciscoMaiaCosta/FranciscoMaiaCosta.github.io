@@ -541,9 +541,9 @@
             grid-column: 8 / 18;
             justify-self: center;
         }
-
+        
         .timeline-title {
-            font-size: 1.6rem;
+            font-size: 2rem;
             font-weight: 700;
             margin-bottom: 1rem;
             color: var(--text-accent);
@@ -555,10 +555,9 @@
             grid-auto-rows: max-content;
             gap: 1.25rem;
             padding-left: 2.25rem; /* room for dots/line */
-            max-height: 420px; /* inner scroll container */
-            overflow: auto;
-            overscroll-behavior: contain;
-            scrollbar-width: thin;
+            /* scroll-driven: allow page to control scrolling */
+            max-height: none;
+            overflow: visible;
         }
 
         .timeline-track {
@@ -612,6 +611,7 @@
             transition: transform 0.2s ease, background 0.3s ease, border-color 0.3s ease;
         }
 
+        .timeline-item.active .dot,
         .timeline-item[aria-expanded="true"] .dot {
             transform: scale(1.2);
             background: var(--text-accent);
@@ -638,6 +638,7 @@
             padding: 0 0.5rem;
         }
 
+        .timeline-item.active .content,
         .timeline-item[aria-expanded="true"] .content {
             max-height: 220px;
             opacity: 1;
@@ -786,6 +787,8 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <script>
         // Theme management
         function initTheme() {
@@ -873,36 +876,49 @@
                 }
             });
 
-            // Timeline interactions
+            // Timeline interactions (GSAP ScrollTrigger driven)
             const timeline = document.querySelector('.timeline');
-            if (timeline) {
-                const items = timeline.querySelectorAll('.timeline-item');
-                const progress = timeline.querySelector('.timeline-progress');
+            const timelineWrapper = document.querySelector('.timeline-wrapper');
+            if (timeline && timelineWrapper && window.gsap && window.ScrollTrigger) {
+                gsap.registerPlugin(ScrollTrigger);
 
+                const progressEl = timeline.querySelector('.timeline-progress');
+                // Pin the timeline wrapper and animate the progress height
+                gsap.to(progressEl, {
+                    height: '100%',
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: timelineWrapper,
+                        start: 'top center',
+                        end: 'bottom center',
+                        scrub: true,
+                        pin: true
+                    }
+                });
+
+                const items = Array.from(timeline.querySelectorAll('.timeline-item'));
+                items.forEach((item) => {
+                    const dot = item.querySelector('.dot');
+                    ScrollTrigger.create({
+                        trigger: item,
+                        start: 'center center',
+                        end: '+=200',
+                        scrub: true,
+                        onToggle: (self) => {
+                            item.classList.toggle('active', self.isActive);
+                            item.setAttribute('aria-expanded', self.isActive ? 'true' : 'false');
+                        }
+                    });
+                });
+            } else if (timeline) {
+                // Fallback: keep click-to-toggle interaction
+                const items = timeline.querySelectorAll('.timeline-item');
                 items.forEach(item => {
                     item.addEventListener('click', () => {
                         const expanded = item.getAttribute('aria-expanded') === 'true';
                         item.setAttribute('aria-expanded', (!expanded).toString());
                     });
-                    item.addEventListener('keydown', (ev) => {
-                        if (ev.key === 'Enter' || ev.key === ' ') {
-                            ev.preventDefault();
-                            item.click();
-                        }
-                    });
                 });
-
-                const updateProgress = () => {
-                    const scrollTop = timeline.scrollTop;
-                    const scrollHeight = timeline.scrollHeight - timeline.clientHeight;
-                    const percent = scrollHeight > 0 ? (scrollTop / scrollHeight) : 0;
-                    if (progress) {
-                        progress.style.height = `${Math.max(0, Math.min(1, percent)) * 100}%`;
-                    }
-                };
-
-                timeline.addEventListener('scroll', updateProgress, { passive: true });
-                updateProgress();
             }
         });
 
