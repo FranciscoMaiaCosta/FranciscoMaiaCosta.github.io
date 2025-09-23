@@ -541,8 +541,8 @@
             grid-column: 8 / 18;
             justify-self: center;
         }
-        .timeline-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
-        .timeline-rail { position: relative; }
+        .timeline-layout { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem; align-items: start; }
+        .timeline-rail { position: relative; height: 320px; overflow: hidden; }
         .timeline-sidecard { position: relative; }
         .sidecard-inner { position: sticky; top: 30vh; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; opacity: 0; transform: translateY(10px); transition: opacity 0.25s ease, transform 0.25s ease; }
         .sidecard-year { font-weight: 700; color: var(--text-accent); margin-bottom: 0.5rem; }
@@ -557,49 +557,42 @@
         }
 
         .timeline {
-            position: relative;
-            display: grid;
-            grid-auto-rows: max-content;
-            gap: 3rem;
-            padding-left: 2.25rem; /* room for dots/line */
-            /* scroll-driven: allow page to control scrolling */
-            max-height: none;
-            overflow: visible;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 4rem;
+            padding: 0 4rem;
+            height: 100%;
+            will-change: transform;
         }
 
         .timeline-track {
             position: absolute;
-            left: 1rem;
-            top: 0.5rem;
-            bottom: 0.5rem;
-            width: 2px;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 2px;
+            transform: translateY(-50%);
             background: var(--border-color);
         }
 
-        .timeline-progress {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 0%;
-            background: var(--text-accent);
-            transition: height 0.2s ease;
-        }
+        .timeline-progress { display: none; }
 
         .timeline-item {
             position: relative;
-            display: grid;
-            grid-template-columns: auto 1fr;
-            align-items: start;
-            gap: 0.5rem 1rem;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
             padding: 0.25rem 0.5rem;
-            border-radius: 10px;
             background: transparent;
             border: 1px solid transparent;
             cursor: pointer;
-            text-align: left;
+            text-align: center;
             opacity: 0.15;
-            transition: opacity 0.25s ease;
+            transition: opacity 0.25s ease, transform 0.25s ease;
         }
 
         .timeline-item:focus-visible {
@@ -608,9 +601,8 @@
         }
 
         .timeline-item .dot {
-            position: absolute;
-            left: -1.25rem;
-            top: 0.95rem;
+            position: relative;
+            top: 0;
             width: 12px;
             height: 12px;
             background: var(--bg-primary);
@@ -627,25 +619,9 @@
             border-color: var(--text-accent);
         }
 
-        .timeline-item .year {
-            grid-column: 2;
-            font-weight: 700;
-            color: var(--text-accent);
-        }
+        .timeline-item .year { font-weight: 700; color: var(--text-accent); }
 
-        .timeline-item .content {
-            grid-column: 2;
-            color: var(--text-primary);
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(-4px);
-            transition: max-height 0.25s ease, opacity 0.2s ease, transform 0.2s ease, background 0.3s ease, border-color 0.3s ease;
-            background: transparent;
-            border: 1px solid transparent;
-            border-radius: 8px;
-            padding: 0 0.5rem;
-        }
+        .timeline-item .content { display: none; }
 
         .timeline-item[aria-expanded="true"] .content {
             max-height: 220px;
@@ -668,7 +644,9 @@
 
         @media (max-width: 768px) {
             .timeline-wrapper { grid-column: 1; }
-            .timeline { max-height: none; }
+            .timeline-rail { height: auto; overflow: visible; }
+            .timeline { position: relative; display: grid; grid-auto-flow: row; place-items: center; gap: 2rem; transform: none !important; }
+            .timeline-track { top: auto; height: 0; }
             .sidecard-inner { position: static; transform: none; opacity: 1; }
         }
     </style>
@@ -751,6 +729,24 @@
                                     <div class="timeline-track" aria-hidden="true">
                                         <div class="timeline-progress" aria-hidden="true"></div>
                                     </div>
+
+                                    <button class="timeline-item" role="listitem" aria-expanded="false">
+                                        <span class="dot" aria-hidden="true"></span>
+                                        <span class="year">2019</span>
+                                        <span class="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</span>
+                                    </button>
+
+                                    <button class="timeline-item" role="listitem" aria-expanded="false">
+                                        <span class="dot" aria-hidden="true"></span>
+                                        <span class="year">2020</span>
+                                        <span class="content">Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</span>
+                                    </button>
+
+                                    <button class="timeline-item" role="listitem" aria-expanded="false">
+                                        <span class="dot" aria-hidden="true"></span>
+                                        <span class="year">2021</span>
+                                        <span class="content">Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta.</span>
+                                    </button>
 
                                     <button class="timeline-item" role="listitem" aria-expanded="false">
                                         <span class="dot" aria-hidden="true"></span>
@@ -912,9 +908,7 @@
                 const titleEl = document.querySelector('.timeline-title');
                 // Pin the timeline wrapper and run a conveyor animation of items
                 const items = Array.from(timeline.querySelectorAll('.timeline-item'));
-                const rowGap = 48; // aligns with CSS gap (~3rem)
-                const itemHeight = 48; // approximate height per item collapsed
-                const step = itemHeight + rowGap; // distance to move per item
+                const step = 200; // px per item horizontally
                 const conveyor = gsap.timeline({
                     scrollTrigger: {
                         trigger: timelineSection,
@@ -927,8 +921,8 @@
                     }
                 });
 
-                // Move list upward smoothly as a group
-                conveyor.to(timeline, { y: () => -(step * (items.length - 1)), ease: 'none' }, 0);
+                // Move list horizontally as a group
+                conveyor.to(timeline, { x: () => -(step * (items.length - 1)), ease: 'none' }, 0);
 
                 // Fade title away as conveyor starts
                 if (titleEl) {
@@ -963,13 +957,9 @@
                 };
 
                 items.forEach((item, index) => {
-                    ScrollTrigger.create({
-                        trigger: item,
-                        start: 'center center',
-                        end: 'center center',
-                        onEnter: () => updateNeighborhood(index),
-                        onEnterBack: () => updateNeighborhood(index),
-                    });
+                    const pos = index * step;
+                    conveyor.addLabel(`item-${index}`, pos / (step * (items.length - 1)));
+                    conveyor.call(() => updateNeighborhood(index), [], pos / (step * (items.length - 1)));
                 });
 
                 // Click handling remains for opening cards (optional)
