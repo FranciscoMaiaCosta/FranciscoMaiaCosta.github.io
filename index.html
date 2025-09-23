@@ -535,6 +535,114 @@
         * {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
+
+        /* Timeline */
+        .timeline-wrapper {
+            grid-column: 15 / 26;
+        }
+
+        .timeline-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-accent);
+        }
+
+        .timeline {
+            position: relative;
+            display: grid;
+            grid-auto-rows: max-content;
+            gap: 0.75rem;
+            padding-left: 2.25rem; /* room for dots/line */
+            max-height: 420px; /* inner scroll container */
+            overflow: auto;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+        }
+
+        .timeline-track {
+            position: absolute;
+            left: 1rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 0%;
+            background: var(--text-accent);
+            transition: height 0.2s ease;
+        }
+
+        .timeline-item {
+            position: relative;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: start;
+            gap: 0.75rem 1rem;
+            padding: 0.75rem 0.75rem;
+            border-radius: 8px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .timeline-item:focus-visible {
+            outline: 2px solid var(--text-accent);
+            outline-offset: 2px;
+        }
+
+        .timeline-item .dot {
+            position: absolute;
+            left: -1.25rem;
+            top: 0.95rem;
+            width: 12px;
+            height: 12px;
+            background: var(--bg-primary);
+            border: 3px solid var(--text-accent);
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px var(--bg-primary);
+            transition: transform 0.2s ease, background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .timeline-item[aria-expanded="true"] .dot {
+            transform: scale(1.2);
+            background: var(--text-accent);
+            border-color: var(--text-accent);
+        }
+
+        .timeline-item .year {
+            grid-column: 2;
+            font-weight: 700;
+            color: var(--text-accent);
+        }
+
+        .timeline-item .content {
+            grid-column: 2;
+            color: var(--text-primary);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.25s ease;
+        }
+
+        .timeline-item[aria-expanded="true"] .content {
+            max-height: 200px;
+        }
+
+        @media (max-width: 1024px) {
+            .timeline-wrapper { grid-column: 15 / 25; }
+        }
+
+        @media (max-width: 768px) {
+            .timeline-wrapper { grid-column: 1; }
+            .timeline { max-height: none; }
+        }
     </style>
 </head>
 <body>
@@ -584,6 +692,51 @@
                             I combine my Finance foundation with technical expertise in Python and automation, applying these skills to advanced financial analysis, portfolio management, and investment processes. My goal is to continuously strengthen these capabilities in order to contribute effectively to value creation and the strategic development of the financial industry.
                         </p>
                         <a href="curriculum.html" class="cta-button fade-in-delay-2">Curriculum</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="section" id="timeline">
+            <div class="container">
+                <div class="section-content">
+                    <div class="hero-image">
+                        <img src="https://images.squarespace-cdn.com/content/v1/68c57d843e170b6a19693f75/392d854c-c436-4299-85f1-0e8a88422707/Imagem+WhatsApp+2025-09-13+%C3%A0s+15.27.44_6e1dfe63.jpg" 
+                             alt="Francisco Maia Costa" 
+                             loading="lazy">
+                    </div>
+                    <div class="timeline-wrapper">
+                        <h2 class="timeline-title">Timeline</h2>
+                        <div class="timeline" role="list">
+                            <div class="timeline-track" aria-hidden="true">
+                                <div class="timeline-progress" aria-hidden="true"></div>
+                            </div>
+
+                            <button class="timeline-item" role="listitem" aria-expanded="false">
+                                <span class="dot" aria-hidden="true"></span>
+                                <span class="year">2022</span>
+                                <span class="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</span>
+                            </button>
+
+                            <button class="timeline-item" role="listitem" aria-expanded="false">
+                                <span class="dot" aria-hidden="true"></span>
+                                <span class="year">2023</span>
+                                <span class="content">Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</span>
+                            </button>
+
+                            <button class="timeline-item" role="listitem" aria-expanded="false">
+                                <span class="dot" aria-hidden="true"></span>
+                                <span class="year">2024</span>
+                                <span class="content">Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta.</span>
+                            </button>
+
+                            <button class="timeline-item" role="listitem" aria-expanded="false">
+                                <span class="dot" aria-hidden="true"></span>
+                                <span class="year">2025</span>
+                                <span class="content">Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu.</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -712,6 +865,38 @@
                     menuToggle.textContent = '☰';
                 }
             });
+
+            // Timeline interactions
+            const timeline = document.querySelector('.timeline');
+            if (timeline) {
+                const items = timeline.querySelectorAll('.timeline-item');
+                const progress = timeline.querySelector('.timeline-progress');
+
+                items.forEach(item => {
+                    item.addEventListener('click', () => {
+                        const expanded = item.getAttribute('aria-expanded') === 'true';
+                        item.setAttribute('aria-expanded', (!expanded).toString());
+                    });
+                    item.addEventListener('keydown', (ev) => {
+                        if (ev.key === 'Enter' || ev.key === ' ') {
+                            ev.preventDefault();
+                            item.click();
+                        }
+                    });
+                });
+
+                const updateProgress = () => {
+                    const scrollTop = timeline.scrollTop;
+                    const scrollHeight = timeline.scrollHeight - timeline.clientHeight;
+                    const percent = scrollHeight > 0 ? (scrollTop / scrollHeight) : 0;
+                    if (progress) {
+                        progress.style.height = `${Math.max(0, Math.min(1, percent)) * 100}%`;
+                    }
+                };
+
+                timeline.addEventListener('scroll', updateProgress, { passive: true });
+                updateProgress();
+            }
         });
 
         // Animation on scroll
