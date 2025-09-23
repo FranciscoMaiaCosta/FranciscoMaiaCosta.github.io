@@ -547,6 +547,7 @@
             font-weight: 700;
             margin-bottom: 1rem;
             color: var(--text-accent);
+            will-change: transform, opacity;
         }
 
         .timeline {
@@ -889,21 +890,40 @@
                 gsap.registerPlugin(ScrollTrigger);
 
                 const progressEl = timeline.querySelector('.timeline-progress');
+                const titleEl = document.querySelector('.timeline-title');
                 // Pin the timeline wrapper and animate the progress height
+                const items = Array.from(timeline.querySelectorAll('.timeline-item'));
+                const estimatedPerItem = 350; // scroll distance per item
+                const totalScroll = Math.max(800, items.length * estimatedPerItem);
+
                 gsap.to(progressEl, {
                     height: '100%',
                     ease: 'none',
                     scrollTrigger: {
                         trigger: timelineSection,
-                        start: 'top top+=120',
-                        end: () => `+=${timeline.scrollHeight}`,
+                        start: 'center center',
+                        end: `+=${totalScroll}`,
                         scrub: true,
                         pin: timelineWrapper,
-                        anticipatePin: 1
+                        pinSpacing: true,
+                        anticipatePin: 2
                     }
                 });
 
-                const items = Array.from(timeline.querySelectorAll('.timeline-item'));
+                if (titleEl) {
+                    gsap.to(titleEl, {
+                        opacity: 0,
+                        y: -16,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: timelineSection,
+                            start: 'center center',
+                            end: '+=140',
+                            scrub: true
+                        }
+                    });
+                }
+
                 // Ensure only prev, active, next are prominent; do not auto-open cards
                 const updateNeighborhood = (activeIndex) => {
                     items.forEach((it, i) => {
