@@ -541,6 +541,12 @@
             grid-column: 8 / 18;
             justify-self: center;
         }
+        .timeline-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+        .timeline-rail { position: relative; }
+        .timeline-sidecard { position: relative; }
+        .sidecard-inner { position: sticky; top: 30vh; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; opacity: 0; transform: translateY(10px); transition: opacity 0.25s ease, transform 0.25s ease; }
+        .sidecard-year { font-weight: 700; color: var(--text-accent); margin-bottom: 0.5rem; }
+        .sidecard-text { color: var(--text-primary); }
         
         .timeline-title {
             font-size: 2rem;
@@ -656,11 +662,14 @@
 
         @media (max-width: 1024px) {
             .timeline-wrapper { grid-column: 6 / 20; }
+            .timeline-layout { grid-template-columns: 1fr; }
+            .sidecard-inner { top: 10vh; }
         }
 
         @media (max-width: 768px) {
             .timeline-wrapper { grid-column: 1; }
             .timeline { max-height: none; }
+            .sidecard-inner { position: static; transform: none; opacity: 1; }
         }
     </style>
 </head>
@@ -736,34 +745,44 @@
                 <div class="section-content">
                     <div class="timeline-wrapper">
                         <h2 class="timeline-title">Timeline</h2>
-                        <div class="timeline" role="list">
-                            <div class="timeline-track" aria-hidden="true">
-                                <div class="timeline-progress" aria-hidden="true"></div>
+                        <div class="timeline-layout">
+                            <div class="timeline-rail">
+                                <div class="timeline" role="list">
+                                    <div class="timeline-track" aria-hidden="true">
+                                        <div class="timeline-progress" aria-hidden="true"></div>
+                                    </div>
+
+                                    <button class="timeline-item" role="listitem" aria-expanded="false">
+                                        <span class="dot" aria-hidden="true"></span>
+                                        <span class="year">2022</span>
+                                        <span class="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</span>
+                                    </button>
+
+                                    <button class="timeline-item" role="listitem" aria-expanded="false">
+                                        <span class="dot" aria-hidden="true"></span>
+                                        <span class="year">2023</span>
+                                        <span class="content">Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</span>
+                                    </button>
+
+                                    <button class="timeline-item" role="listitem" aria-expanded="false">
+                                        <span class="dot" aria-hidden="true"></span>
+                                        <span class="year">2024</span>
+                                        <span class="content">Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta.</span>
+                                    </button>
+
+                                    <button class="timeline-item" role="listitem" aria-expanded="false">
+                                        <span class="dot" aria-hidden="true"></span>
+                                        <span class="year">2025</span>
+                                        <span class="content">Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu.</span>
+                                    </button>
+                                </div>
                             </div>
-
-                            <button class="timeline-item" role="listitem" aria-expanded="false">
-                                <span class="dot" aria-hidden="true"></span>
-                                <span class="year">2022</span>
-                                <span class="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</span>
-                            </button>
-
-                            <button class="timeline-item" role="listitem" aria-expanded="false">
-                                <span class="dot" aria-hidden="true"></span>
-                                <span class="year">2023</span>
-                                <span class="content">Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</span>
-                            </button>
-
-                            <button class="timeline-item" role="listitem" aria-expanded="false">
-                                <span class="dot" aria-hidden="true"></span>
-                                <span class="year">2024</span>
-                                <span class="content">Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta.</span>
-                            </button>
-
-                            <button class="timeline-item" role="listitem" aria-expanded="false">
-                                <span class="dot" aria-hidden="true"></span>
-                                <span class="year">2025</span>
-                                <span class="content">Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu.</span>
-                            </button>
+                            <aside class="timeline-sidecard" aria-live="polite">
+                                <div class="sidecard-inner">
+                                    <div class="sidecard-year">2022</div>
+                                    <div class="sidecard-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</div>
+                                </div>
+                            </aside>
                         </div>
                     </div>
                 </div>
@@ -891,18 +910,16 @@
 
                 const progressEl = timeline.querySelector('.timeline-progress');
                 const titleEl = document.querySelector('.timeline-title');
-                // Pin the timeline wrapper and animate the progress height
+                // Pin the timeline wrapper and run a conveyor animation of items
                 const items = Array.from(timeline.querySelectorAll('.timeline-item'));
-                const estimatedPerItem = 350; // scroll distance per item
-                const totalScroll = Math.max(800, items.length * estimatedPerItem);
-
-                gsap.to(progressEl, {
-                    height: '100%',
-                    ease: 'none',
+                const rowGap = 48; // aligns with CSS gap (~3rem)
+                const itemHeight = 48; // approximate height per item collapsed
+                const step = itemHeight + rowGap; // distance to move per item
+                const conveyor = gsap.timeline({
                     scrollTrigger: {
                         trigger: timelineSection,
                         start: 'center center',
-                        end: `+=${totalScroll}`,
+                        end: `+=${step * (items.length + 1)}`,
                         scrub: true,
                         pin: timelineWrapper,
                         pinSpacing: true,
@@ -910,29 +927,39 @@
                     }
                 });
 
+                // Move list upward smoothly as a group
+                conveyor.to(timeline, { y: () => -(step * (items.length - 1)), ease: 'none' }, 0);
+
+                // Fade title away as conveyor starts
                 if (titleEl) {
-                    gsap.to(titleEl, {
-                        opacity: 0,
-                        y: -16,
-                        ease: 'none',
-                        scrollTrigger: {
-                            trigger: timelineSection,
-                            start: 'center center',
-                            end: '+=140',
-                            scrub: true
-                        }
-                    });
+                    conveyor.to(titleEl, { opacity: 0, y: -16, ease: 'none' }, 0);
                 }
 
-                // Ensure only prev, active, next are prominent; do not auto-open cards
+                // Highlight active item at center and update sidecard
+                const sidecard = document.querySelector('.timeline-sidecard .sidecard-inner');
+                const sideYear = document.querySelector('.timeline-sidecard .sidecard-year');
+                const sideText = document.querySelector('.timeline-sidecard .sidecard-text');
+
                 const updateNeighborhood = (activeIndex) => {
                     items.forEach((it, i) => {
                         it.classList.remove('prev', 'active', 'next');
                         if (i === activeIndex - 1) it.classList.add('prev');
                         if (i === activeIndex) it.classList.add('active');
                         if (i === activeIndex + 1) it.classList.add('next');
-                        // Do not set aria-expanded here; click controls opening
                     });
+                    if (sidecard) {
+                        const active = items[activeIndex];
+                        const y = active?.querySelector('.year')?.textContent || '';
+                        const t = active?.querySelector('.content')?.textContent || '';
+                        sidecard.style.opacity = '0';
+                        sidecard.style.transform = 'translateY(10px)';
+                        requestAnimationFrame(() => {
+                            if (sideYear) sideYear.textContent = y;
+                            if (sideText) sideText.textContent = t;
+                            sidecard.style.opacity = '1';
+                            sidecard.style.transform = 'translateY(0)';
+                        });
+                    }
                 };
 
                 items.forEach((item, index) => {
@@ -945,7 +972,7 @@
                     });
                 });
 
-                // Click handling remains for opening cards
+                // Click handling remains for opening cards (optional)
                 items.forEach(item => {
                     item.addEventListener('click', () => {
                         const expanded = item.getAttribute('aria-expanded') === 'true';
