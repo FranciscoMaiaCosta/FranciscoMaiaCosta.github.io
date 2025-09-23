@@ -536,119 +536,7 @@
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
-        /* Timeline */
-        .timeline-wrapper {
-            grid-column: 8 / 18;
-            justify-self: center;
-        }
-        .timeline-layout { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem; align-items: start; }
-        .timeline-rail { position: relative; height: 320px; overflow: hidden; }
-        .timeline-sidecard { position: relative; }
-        .sidecard-inner { position: sticky; top: 30vh; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; opacity: 0; transform: translateY(10px); transition: opacity 0.25s ease, transform 0.25s ease; }
-        .sidecard-year { font-weight: 700; color: var(--text-accent); margin-bottom: 0.5rem; }
-        .sidecard-text { color: var(--text-primary); }
-        
-        .timeline-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text-accent);
-            will-change: transform, opacity;
-        }
-
-        .timeline {
-            position: absolute;
-            left: 0;
-            top: 0;
-            display: inline-flex;
-            align-items: center;
-            gap: 4rem;
-            padding: 0 4rem;
-            height: 100%;
-            will-change: transform;
-        }
-
-        .timeline-track {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 50%;
-            height: 2px;
-            transform: translateY(-50%);
-            background: var(--border-color);
-        }
-
-        .timeline-progress { display: none; }
-
-        .timeline-item {
-            position: relative;
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.25rem 0.5rem;
-            background: transparent;
-            border: 1px solid transparent;
-            cursor: pointer;
-            text-align: center;
-            opacity: 0.15;
-            transition: opacity 0.25s ease, transform 0.25s ease;
-        }
-
-        .timeline-item:focus-visible {
-            outline: 2px solid var(--text-accent);
-            outline-offset: 2px;
-        }
-
-        .timeline-item .dot {
-            position: relative;
-            top: 0;
-            width: 12px;
-            height: 12px;
-            background: var(--bg-primary);
-            border: 3px solid var(--text-accent);
-            border-radius: 50%;
-            box-shadow: 0 0 0 2px var(--bg-primary);
-            transition: transform 0.2s ease, background 0.3s ease, border-color 0.3s ease;
-        }
-
-        .timeline-item.active .dot,
-        .timeline-item[aria-expanded="true"] .dot {
-            transform: scale(1.2);
-            background: var(--text-accent);
-            border-color: var(--text-accent);
-        }
-
-        .timeline-item .year { font-weight: 700; color: var(--text-accent); }
-
-        .timeline-item .content { display: none; }
-
-        .timeline-item[aria-expanded="true"] .content {
-            max-height: 220px;
-            opacity: 1;
-            transform: translateY(0);
-            background: var(--card-bg);
-            border-color: var(--border-color);
-            padding: 0.5rem 0.75rem;
-        }
-
-        .timeline-item.prev,
-        .timeline-item.active,
-        .timeline-item.next { opacity: 1; }
-
-        @media (max-width: 1024px) {
-            .timeline-wrapper { grid-column: 6 / 20; }
-            .timeline-layout { grid-template-columns: 1fr; }
-            .sidecard-inner { top: 10vh; }
-        }
-
-        @media (max-width: 768px) {
-            .timeline-wrapper { grid-column: 1; }
-            .timeline-rail { height: auto; overflow: visible; }
-            .timeline { position: relative; display: grid; grid-auto-flow: row; place-items: center; gap: 2rem; transform: none !important; }
-            .timeline-track { top: auto; height: 0; }
-            .sidecard-inner { position: static; transform: none; opacity: 1; }
-        }
+        /* (timeline styles removed) */
     </style>
 </head>
 <body>
@@ -717,73 +605,7 @@
             </div>
         </section>
 
-        <!-- Timeline Section (moved below welcome) -->
-        <section class="section" id="timeline">
-            <div class="container">
-                <div class="section-content">
-                    <div class="timeline-wrapper">
-                        <h2 class="timeline-title">Timeline</h2>
-                        <div class="timeline-layout">
-                            <div class="timeline-rail">
-                                <div class="timeline" role="list">
-                                    <div class="timeline-track" aria-hidden="true">
-                                        <div class="timeline-progress" aria-hidden="true"></div>
-                                    </div>
-
-                                    <button class="timeline-item" role="listitem" aria-expanded="false">
-                                        <span class="dot" aria-hidden="true"></span>
-                                        <span class="year">2019</span>
-                                        <span class="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</span>
-                                    </button>
-
-                                    <button class="timeline-item" role="listitem" aria-expanded="false">
-                                        <span class="dot" aria-hidden="true"></span>
-                                        <span class="year">2020</span>
-                                        <span class="content">Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</span>
-                                    </button>
-
-                                    <button class="timeline-item" role="listitem" aria-expanded="false">
-                                        <span class="dot" aria-hidden="true"></span>
-                                        <span class="year">2021</span>
-                                        <span class="content">Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta.</span>
-                                    </button>
-
-                                    <button class="timeline-item" role="listitem" aria-expanded="false">
-                                        <span class="dot" aria-hidden="true"></span>
-                                        <span class="year">2022</span>
-                                        <span class="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</span>
-                                    </button>
-
-                                    <button class="timeline-item" role="listitem" aria-expanded="false">
-                                        <span class="dot" aria-hidden="true"></span>
-                                        <span class="year">2023</span>
-                                        <span class="content">Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</span>
-                                    </button>
-
-                                    <button class="timeline-item" role="listitem" aria-expanded="false">
-                                        <span class="dot" aria-hidden="true"></span>
-                                        <span class="year">2024</span>
-                                        <span class="content">Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta.</span>
-                                    </button>
-
-                                    <button class="timeline-item" role="listitem" aria-expanded="false">
-                                        <span class="dot" aria-hidden="true"></span>
-                                        <span class="year">2025</span>
-                                        <span class="content">Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu.</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <aside class="timeline-sidecard" aria-live="polite">
-                                <div class="sidecard-inner">
-                                    <div class="sidecard-year">2022</div>
-                                    <div class="sidecard-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</div>
-                                </div>
-                            </aside>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        
     </main>
 
     <footer>
@@ -808,8 +630,6 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <script>
         // Theme management
         function initTheme() {
@@ -897,88 +717,7 @@
                 }
             });
 
-            // Timeline interactions (GSAP ScrollTrigger driven)
-            const timeline = document.querySelector('.timeline');
-            const timelineWrapper = document.querySelector('.timeline-wrapper');
-            const timelineSection = document.getElementById('timeline');
-            if (timeline && timelineWrapper && timelineSection && window.gsap && window.ScrollTrigger) {
-                gsap.registerPlugin(ScrollTrigger);
-
-                const progressEl = timeline.querySelector('.timeline-progress');
-                const titleEl = document.querySelector('.timeline-title');
-                // Pin the timeline wrapper and run a conveyor animation of items
-                const items = Array.from(timeline.querySelectorAll('.timeline-item'));
-                const step = 200; // px per item horizontally
-                const conveyor = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: timelineSection,
-                        start: 'center center',
-                        end: `+=${step * (items.length + 1)}`,
-                        scrub: true,
-                        pin: timelineWrapper,
-                        pinSpacing: true,
-                        anticipatePin: 2
-                    }
-                });
-
-                // Move list horizontally as a group
-                conveyor.to(timeline, { x: () => -(step * (items.length - 1)), ease: 'none' }, 0);
-
-                // Fade title away as conveyor starts
-                if (titleEl) {
-                    conveyor.to(titleEl, { opacity: 0, y: -16, ease: 'none' }, 0);
-                }
-
-                // Highlight active item at center and update sidecard
-                const sidecard = document.querySelector('.timeline-sidecard .sidecard-inner');
-                const sideYear = document.querySelector('.timeline-sidecard .sidecard-year');
-                const sideText = document.querySelector('.timeline-sidecard .sidecard-text');
-
-                const updateNeighborhood = (activeIndex) => {
-                    items.forEach((it, i) => {
-                        it.classList.remove('prev', 'active', 'next');
-                        if (i === activeIndex - 1) it.classList.add('prev');
-                        if (i === activeIndex) it.classList.add('active');
-                        if (i === activeIndex + 1) it.classList.add('next');
-                    });
-                    if (sidecard) {
-                        const active = items[activeIndex];
-                        const y = active?.querySelector('.year')?.textContent || '';
-                        const t = active?.querySelector('.content')?.textContent || '';
-                        sidecard.style.opacity = '0';
-                        sidecard.style.transform = 'translateY(10px)';
-                        requestAnimationFrame(() => {
-                            if (sideYear) sideYear.textContent = y;
-                            if (sideText) sideText.textContent = t;
-                            sidecard.style.opacity = '1';
-                            sidecard.style.transform = 'translateY(0)';
-                        });
-                    }
-                };
-
-                items.forEach((item, index) => {
-                    const pos = index * step;
-                    conveyor.addLabel(`item-${index}`, pos / (step * (items.length - 1)));
-                    conveyor.call(() => updateNeighborhood(index), [], pos / (step * (items.length - 1)));
-                });
-
-                // Click handling remains for opening cards (optional)
-                items.forEach(item => {
-                    item.addEventListener('click', () => {
-                        const expanded = item.getAttribute('aria-expanded') === 'true';
-                        item.setAttribute('aria-expanded', (!expanded).toString());
-                    });
-                });
-            } else if (timeline) {
-                // Fallback: keep click-to-toggle interaction
-                const items = timeline.querySelectorAll('.timeline-item');
-                items.forEach(item => {
-                    item.addEventListener('click', () => {
-                        const expanded = item.getAttribute('aria-expanded') === 'true';
-                        item.setAttribute('aria-expanded', (!expanded).toString());
-                    });
-                });
-            }
+            // (timeline scripts removed)
         });
 
         // Animation on scroll
