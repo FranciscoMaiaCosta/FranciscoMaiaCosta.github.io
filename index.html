@@ -553,7 +553,7 @@
             position: relative;
             display: grid;
             grid-auto-rows: max-content;
-            gap: 1.25rem;
+            gap: 3rem;
             padding-left: 2.25rem; /* room for dots/line */
             /* scroll-driven: allow page to control scrolling */
             max-height: none;
@@ -591,6 +591,8 @@
             border: 1px solid transparent;
             cursor: pointer;
             text-align: left;
+            opacity: 0.15;
+            transition: opacity 0.25s ease;
         }
 
         .timeline-item:focus-visible {
@@ -638,7 +640,6 @@
             padding: 0 0.5rem;
         }
 
-        .timeline-item.active .content,
         .timeline-item[aria-expanded="true"] .content {
             max-height: 220px;
             opacity: 1;
@@ -647,6 +648,10 @@
             border-color: var(--border-color);
             padding: 0.5rem 0.75rem;
         }
+
+        .timeline-item.prev,
+        .timeline-item.active,
+        .timeline-item.next { opacity: 1; }
 
         @media (max-width: 1024px) {
             .timeline-wrapper { grid-column: 6 / 20; }
@@ -879,7 +884,8 @@
             // Timeline interactions (GSAP ScrollTrigger driven)
             const timeline = document.querySelector('.timeline');
             const timelineWrapper = document.querySelector('.timeline-wrapper');
-            if (timeline && timelineWrapper && window.gsap && window.ScrollTrigger) {
+            const timelineSection = document.getElementById('timeline');
+            if (timeline && timelineWrapper && timelineSection && window.gsap && window.ScrollTrigger) {
                 gsap.registerPlugin(ScrollTrigger);
 
                 const progressEl = timeline.querySelector('.timeline-progress');
@@ -888,26 +894,42 @@
                     height: '100%',
                     ease: 'none',
                     scrollTrigger: {
-                        trigger: timelineWrapper,
-                        start: 'top center',
-                        end: 'bottom center',
+                        trigger: timelineSection,
+                        start: 'top top+=120',
+                        end: () => `+=${timeline.scrollHeight}`,
                         scrub: true,
-                        pin: true
+                        pin: timelineWrapper,
+                        anticipatePin: 1
                     }
                 });
 
                 const items = Array.from(timeline.querySelectorAll('.timeline-item'));
-                items.forEach((item) => {
-                    const dot = item.querySelector('.dot');
+                // Ensure only prev, active, next are prominent; do not auto-open cards
+                const updateNeighborhood = (activeIndex) => {
+                    items.forEach((it, i) => {
+                        it.classList.remove('prev', 'active', 'next');
+                        if (i === activeIndex - 1) it.classList.add('prev');
+                        if (i === activeIndex) it.classList.add('active');
+                        if (i === activeIndex + 1) it.classList.add('next');
+                        // Do not set aria-expanded here; click controls opening
+                    });
+                };
+
+                items.forEach((item, index) => {
                     ScrollTrigger.create({
                         trigger: item,
                         start: 'center center',
-                        end: '+=200',
-                        scrub: true,
-                        onToggle: (self) => {
-                            item.classList.toggle('active', self.isActive);
-                            item.setAttribute('aria-expanded', self.isActive ? 'true' : 'false');
-                        }
+                        end: 'center center',
+                        onEnter: () => updateNeighborhood(index),
+                        onEnterBack: () => updateNeighborhood(index),
+                    });
+                });
+
+                // Click handling remains for opening cards
+                items.forEach(item => {
+                    item.addEventListener('click', () => {
+                        const expanded = item.getAttribute('aria-expanded') === 'true';
+                        item.setAttribute('aria-expanded', (!expanded).toString());
                     });
                 });
             } else if (timeline) {
